@@ -1,5 +1,7 @@
 # SafeO
 
+**Live demo:** [https://safeo-shield-1.onrender.com](https://safeo-shield-1.onrender.com)
+
 ## Arabic-Aware Multi-Agent Cybersecurity Engine on AMD GPUs
 
 SafeO is a real-time cybersecurity decision engine that protects enterprise

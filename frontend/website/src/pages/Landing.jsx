@@ -356,6 +356,9 @@ export default function Landing() {
 
       <footer className="land-footer">
         <span>SafeO — ERP Protection Layer</span>
+        <a href="https://safeo-shield-1.onrender.com" target="_blank" rel="noopener noreferrer">
+          Live deployment
+        </a>
         <span>AMD Developer Hackathon · ACT II</span>
       </footer>
     </div>

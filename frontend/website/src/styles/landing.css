@@ -309,6 +309,11 @@
   display: flex; justify-content: space-between; padding: 24px 40px;
   border-top: 1px solid var(--l-border); color: var(--l-muted); font-size: 13px;
 }
+.land-footer a {
+  color: var(--l-accent, #6366f1);
+  text-decoration: none;
+}
+.land-footer a:hover { text-decoration: underline; }
 
 @media (max-width: 720px) {
   .land-nav-links { display: none; }

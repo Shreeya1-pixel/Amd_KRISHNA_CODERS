@@ -1,5 +1,7 @@
 # SafeO — Demo Quickstart
 
+**Live deployment:** https://safeo-shield-1.onrender.com
+
 Run from the **repo root**. Main folders: `backend/` · `frontend/`
 
 ---
