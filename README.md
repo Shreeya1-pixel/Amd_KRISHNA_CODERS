@@ -134,6 +134,29 @@ Optional cloud AI path:
 This is intentional: regulated enterprises should be able to run SafeO without
 sending sensitive payloads to OpenAI or any closed external API.
 
+## AMD Infrastructure
+
+SafeO is built on **AMD-sustainable infrastructure** throughout its AI stack.
+
+**Fireworks AI** — our primary inference provider — runs its entire GPU fleet on
+**AMD Instinct GPUs**, making every agent call (policy analysis, forensics,
+multilingual reasoning, remediation) AMD-powered at the hardware level. SafeO
+routes all optional LLM inference through Fireworks, meaning the project
+naturally inherits AMD's energy-efficient, high-throughput GPU infrastructure
+without requiring a local GPU.
+
+The codebase is also fully **ROCm-ready**: bf16 LoRA fine-tuning, PyTorch
+ROCm wheels, and the DistilBERT / AraBERT Tier 2 classifier are all configured
+to run natively on AMD GPUs when available.
+
+> **Note on AMD AI Developer Cloud:** SafeO was designed and wired to run
+> inference on the AMD AI Developer Cloud. We applied for credits but did not
+> receive approval in time for the hackathon submission. The Fireworks AI path
+> (AMD-hosted) is therefore the active AMD-infrastructure connection in the
+> submitted build. The AMD Cloud integration paths (`amd_setup/` scripts, ROCm
+> config, vLLM startup) remain in the codebase and are ready to activate once
+> access is provisioned.
+
 ## AMD + Fireworks Fit
 
 SafeO is designed for the AMD Developer Hackathon ACT II stack:
