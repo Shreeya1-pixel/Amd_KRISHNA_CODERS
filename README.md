@@ -20,6 +20,71 @@ SafeO is built for the **AMD Developer Hackathon: ACT II**: cloud AI agents,
 AMD GPU acceleration, ROCm-ready model workflows, and Fireworks AI models hosted
 on AMD infrastructure.
 
+## Key Features
+
+### 🤖 SafeO Assistant — Role-Adaptive Security Chatbot
+An AI-powered chat interface that scans any input (URLs, text, code, ERP memos) through the full 3-tier forensic engine and presents the result in language suited to the user's role:
+
+| Role | What they see |
+|---|---|
+| Non-technical user | Plain-English verdict: safe / caution / unsafe |
+| Security analyst | Full MITRE ATT&CK mapping, uncertainty score, per-pattern evidence, audit hash |
+| ERP manager | Business-risk framing — "Hold transaction" / "Review required" / "Clear to process" |
+| Developer | Raw JSON — scores, thresholds, matched patterns, graph evidence |
+
+The Assistant is **not a generic chatbot**. It runs the same forensic engine for every user; depth adapts, the analysis does not. Includes a live side-by-side demo of a homograph phishing URL where ChatGPT calls it "looks safe" and SafeO returns BLOCK with flagged Unicode codepoints.
+
+Live: [https://safeo-shield-1.onrender.com/chat](https://safeo-shield-1.onrender.com/chat)
+
+---
+
+### 🖼️ Visual Evidence Capture
+Headless Chromium (Playwright) screenshots with annotated highlight regions — the only way to show a judge or analyst *exactly what the attacker's page looks like* and *where* the malicious elements are.
+
+For a homograph URL (`https://ọpen-ạccess.com/login`):
+- Playwright navigates the page
+- SafeO overlays colored bounding boxes (HIGH = red, MEDIUM = amber) for: IDN homograph domain bar, Arabic text in title, phishing login form
+- Annotated PNG is saved to `/static/screenshots/` and returned in the scan response
+
+For a GitHub repo:
+- SafeO fetches up to 10 source files via the GitHub API
+- Renders dark-theme code images with highlighted lines where secrets, dangerous exec calls, or prompt-injection patterns are found
+- Returns file path + line number findings
+
+Live: [https://safeo-shield-1.onrender.com/visual](https://safeo-shield-1.onrender.com/visual)
+
+---
+
+### 🔧 Workflow Builder — Visual Security Pipeline Editor
+A drag-and-drop node editor for building custom scan pipelines without writing code. Security teams can compose:
+
+- **Source nodes** — ERP form input, API payload, URL, GitHub repo
+- **Processing nodes** — Tier 1 heuristics, Tier 2 ML classifier, multilingual normalizer, LLM guard
+- **Decision nodes** — risk threshold gate, Bayesian adaptive threshold
+- **Output nodes** — allow/block/warn action, Jira ticket escalation, WebSocket alert, WhatsApp reply
+
+Workflows are validated, persisted, and can be replayed. This makes SafeO configurable for different enterprise contexts without backend changes.
+
+Live: [https://safeo-shield-1.onrender.com/workflow](https://safeo-shield-1.onrender.com/workflow)
+
+---
+
+### 📋 Risk Engine Logs + Jira Escalation
+Every scan decision is logged with source system, risk score, tier used, matched patterns, and timestamp. Security analysts can escalate any log entry directly to Jira with one click — SafeO creates a formatted Jira Task with the full forensic summary.
+
+---
+
+### 🌍 Arabic & Arabizi Security Layer
+SafeO's core differentiator. The `MultilingualAgent` normalizes Arabic, Arabizi, and mixed-script inputs before any pattern matching runs — catching evasion techniques that English-first tools miss entirely:
+
+```text
+3tini admin access      → Arabizi intent normalization
+١=١ UNION SELECT        → Arabic digit obfuscation
+إسقاط جدول users        → Arabic SQL-like destructive intent
+```
+
+---
+
 ## Why SafeO Exists
 
 Modern enterprise apps are full of text boxes: CRM notes, invoice memos, HR
@@ -766,28 +831,46 @@ frontend/
 docs/
 ```
 
-## Why This Is Hackathon-Ready
+## Track 3 (Unicorn Track) — Judging Alignment
 
-SafeO is not a chatbot wrapper. It is a full security workflow:
+SafeO is entered under Track 3: *"Your idea. AMD infrastructure. No benchmarks, no constraints — just build."*
 
-- real API,
-- real ERP integration,
-- real WebSocket investigation replay,
-- real adaptive threshold storage,
-- real attack graph,
-- real LoRA fine-tuning controller,
-- real AMD/ROCm configuration path,
-- real Fireworks model configuration,
-- no OpenAI dependency.
+Judges score on: **creativity, originality, completeness, use of AMD platforms, product/market potential.**
 
-The project demonstrates how AI agents can be useful in a high-stakes
-cybersecurity setting when they are:
+### Creativity & Originality
+- Role-adaptive security chatbot — same forensic engine, depth adapts per user persona
+- Headless screenshot + annotated visual evidence of active phishing pages
+- Arabic/Arabizi normalization as a first-class security layer (not an afterthought)
+- Side-by-side ChatGPT vs SafeO homograph demo built into the product
 
-- grounded in structured evidence,
-- constrained by deterministic routing,
-- auditable through hashes,
-- improved through human feedback,
-- deployable on AMD GPU infrastructure.
+### Completeness
+SafeO is not a demo wrapper. Every component is functional end-to-end:
+
+| Component | Status |
+|---|---|
+| 3-tier ML risk scorer (heuristics → DistilBERT → LLM) | ✅ live |
+| 5-agent LangGraph investigation graph | ✅ live |
+| Role-adaptive Assistant chatbot | ✅ live |
+| Visual evidence capture (Playwright + Pillow) | ✅ live |
+| Drag-and-drop Workflow Builder | ✅ live |
+| SHA-256 tamper-evident audit chain | ✅ live |
+| Bayesian adaptive threshold engine (SQLite-backed) | ✅ live |
+| LoRA fine-tuning controller with AMD bf16 config | ✅ live |
+| Jira one-click escalation from Logs | ✅ live |
+| WebSocket live investigation replay | ✅ live |
+| Odoo ERP module integration | ✅ live |
+| Deployed public demo | ✅ [onrender.com](https://safeo-shield-1.onrender.com) |
+
+### Use of AMD Platforms
+- **Fireworks AI API** (AMD-hosted GPU fleet) — all 5 agent LLM calls route through Fireworks on AMD Instinct hardware
+- **ROCm** — full PyTorch ROCm wheel support; bf16 LoRA training config; GPU-accelerated DistilBERT and AraBERT paths
+- **AMD AI Developer Cloud** — integration paths in `amd_setup/` are implemented and ready; credits were applied for but approval did not arrive before submission deadline
+
+### Product / Market Potential
+- Target: any enterprise running an ERP (Odoo, SAP, Oracle) with Arabic-speaking users or cross-border operations
+- Total addressable market: UAE, Saudi, and wider MENA enterprise sector — 348M Arabic internet users, dramatically under-served by English-first security tools
+- Monetization: SaaS API subscription (per-scan pricing), on-premise ERP module license
+- Moat: Arabic normalization + Bayesian self-improvement + auditable agent graph — not replicable by a generic LLM wrapper
 
 ## One-Line Pitch
 
